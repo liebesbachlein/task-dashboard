@@ -1,0 +1,43 @@
+@import './base.css';
+
+:root {
+  --backdrop-color-desktop: #f0f2f1;
+  --accent-color: #3f5bb5;
+
+  --plain-font: 'Inter', sans-serif;
+
+  /*mobile*/
+  --mobile-dashboard-nav-top-height: 3.5rem;
+  --mobile-dashboard-nav-top-padding: 0 1rem;
+
+  /*desktop*/
+  --side-menu-desktop-width: 25%;
+  --logo-width-desktop: 10rem;
+  --logo-margin-top-desktop: 1rem;
+  --dashboard-baseline-top-desktop: calc(
+    var(--logo-margin-top-desktop) + var(--logo-width-desktop) * 0.27 * 0.67
+  );
+}
+
+* {
+  transition: all 0.15s ease-out;
+}
+
+.button {
+  cursor: pointer;
+  display: inline-flex;
+  height: 3rem;
+  border-radius: 0.3125rem;
+  justify-content: center;
+  background-color: var(--accent-color);
+  align-items: center;
+  box-shadow:
+    -2px 2px 10px 0px rgba(213, 213, 213, 0.35),
+    2px -2px 10px 0px rgba(213, 213, 213, 0.35);
+  color: #fff;
+  font-family: var(--plain-font);
+}
+
+.button:hover {
+  background-color: #5aadff;
+}
