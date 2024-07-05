@@ -48,5 +48,5 @@ coverage
 *.sw?
 
 *.tsbuildinfo
-src/views/home/data/data.ts
-src/views/home/components/data/data.ts
+/resources/js/views/home/data/data.ts
+resources/js/views/home/data/data.ts
