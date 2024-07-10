@@ -16,9 +16,9 @@
 </template>
 
 <script setup lang="ts">
-import { categories, keyDatesMap } from '../data/data'
-import type { EventType } from '../data/event.data'
-import { getInfo, isDueIn } from '../data/time.methods'
+import { getCategories, getEvents, getMenuItems } from '@/data/data'
+import type { EventType } from '../../data/event.data'
+import { getInfo, isDueIn } from '../../data/time.methods'
 
 type EventDueType = {
   routeName: string
@@ -27,27 +27,24 @@ type EventDueType = {
 }
 
 const getEventsDueInMonth = function (): EventDueType[] {
-  const events: EventDueType[] = []
+  const eventsDue: EventDueType[] = []
+  const categories = getCategories()
   for (let i = 0; i < categories.length - 1; i++) {
-    for (let j = 0; j < categories[i].menuItems.length; j++) {
-      const event = categories[i].menuItems[j]
-      const eventDates = keyDatesMap.get(event.routeName)
-      if (eventDates) {
-        for (let k = 0; k < eventDates.length; k++) {
-          if (isDueIn(eventDates[k])) {
-            events.push({
-              routeName: event.routeName,
-              eventName: event.subMenuItems.length
-                ? `${event.menuItemName}: ${event.subMenuItems[k]}`
-                : event.menuItemName,
-              eventDates: eventDates[k]
-            })
-          }
+    const menuItems = getMenuItems(categories[i].id)
+    for (let j = 0; j < menuItems.length; j++) {
+      const events = getEvents(menuItems[j].id)
+      for (let k = 0; k < events.length; k++) {
+        if (isDueIn(events[k])) {
+          eventsDue.push({
+            routeName: menuItems[j].routeName,
+            eventName: events[k].name,
+            eventDates: events[k]
+          })
         }
       }
     }
   }
-  return events
+  return eventsDue
 }
 
 const eventsDueInMonth: EventDueType[] = getEventsDueInMonth()

@@ -10,25 +10,24 @@
       <div class="category-list">
         <div
           class="category-item"
-          v-for="(category, categoryIndex) in props.categories.filter(
-            (item) => !item.isMainCategory
-          )"
+          v-for="(category, categoryIndex) in getCategories()"
           :key="categoryIndex"
         >
-          <div class="category-name">{{ category.categoryName }}</div>
+          <div class="category-name">{{ category.name }}</div>
           <div class="sub-menu-list">
             <router-link
-              v-for="(menuItem, menuItemIndex) in category.menuItems"
+              v-for="(menuItem, menuItemIndex) in getMenuItems(category.id)"
               :key="menuItemIndex"
               :to="{ name: 'DashboardView', params: { id: menuItem.routeName } }"
+              @click="emits('closeNav', true)"
             >
               <div
                 class="sub-menu-item"
                 :class="{
-                  'menu-item-active': isActiveMenuItem([categoryIndex, menuItemIndex])
+                  'menu-item-active': isActiveMenuItem(menuItem.routeName)
                 }"
               >
-                {{ menuItem.menuItemName }}
+                {{ menuItem.name }}
               </div>
             </router-link>
           </div>
@@ -36,11 +35,14 @@
       </div>
 
       <div class="main-menu-list">
-        <router-link :to="{ name: 'DashboardView', params: { id: 'home' } }">
+        <router-link
+          :to="{ name: 'DashboardView', params: { id: 'home' } }"
+          @click="emits('closeNav', true)"
+        >
           <div
             class="main-menu-item"
             :class="{
-              'menu-item-active': isActiveMenuItem([null, 0])
+              'menu-item-active': isActiveMenuItem('home')
             }"
           >
             <img src="@/assets/icons/home.svg" />
@@ -53,63 +55,19 @@
 </template>
 
 <script setup lang="ts">
-import { computed, type PropType } from 'vue'
-import type { CategoryType } from '../data/category.data'
-import type { MenuPositionType } from '../data/menu-position.data'
 import { useRoute } from 'vue-router'
-
-const props = defineProps({
-  categories: { type: Array as PropType<CategoryType[]>, required: true }
-})
-/*
-const emits = defineEmits([
-  changeView: (position: MenuPositionType | undefined): MenuPositionType | undefined => position,
-  closeNav: () => true
-])*/
+import { getCategories, getMenuItems } from '@/data/data'
 
 const emits = defineEmits<{
-  (e: 'changeView', position: MenuPositionType | undefined): void
   (e: 'closeNav', value: true): void
 }>()
 
 const route = useRoute()
 
-const isActiveMenuItem = function (position: MenuPositionType) {
-  const value: MenuPositionType | undefined = currentMenuPosition.value
-  if (value !== undefined) {
-    return position[0] === value[0] && position[1] === value[1]
-  }
+const isActiveMenuItem = function (routeName: string) {
+  if (routeName && routeName === route.params.id) return true
   return false
 }
-
-const getPositionFromRoute = function (
-  routeName: string | undefined
-): MenuPositionType | undefined {
-  if (routeName === undefined) {
-    return [null, 0]
-  }
-
-  for (let i = 0; i < props.categories.length; i++) {
-    for (let j = 0; j < props.categories[i].menuItems.length; j++) {
-      if (props.categories[i].menuItems[j].routeName == routeName) {
-        if (i == props.categories.length - 1) {
-          return [null, j]
-        }
-        return [i, j]
-      }
-    }
-  }
-  return undefined
-}
-
-const currentMenuPosition = computed((): MenuPositionType | undefined => {
-  const newPosition: MenuPositionType | undefined = getPositionFromRoute(
-    typeof route.params.id === 'string' ? route.params.id : undefined
-  )
-  emits('changeView', newPosition)
-  closeNav()
-  return newPosition
-})
 
 const closeNav = () => emits('closeNav', true)
 </script>
@@ -234,8 +192,6 @@ main-menu-list,
 
   .dashboard-nav-inner {
     grid-row: 2;
-    height: 100%;
-    display: grid;
     grid-template-rows: max-content 70% auto;
     padding: 0;
   }
@@ -245,14 +201,14 @@ main-menu-list,
   }
 
   .dashboard-logo img {
-    max-width: var(--logo-width-desktop);
+    max-width: 10rem;
   }
 
   .dashboard-logo {
     grid-row: 1;
     padding: 0;
     padding-left: 1.25rem;
-    margin-top: var(--logo-margin-top-desktop);
+    margin-top: 1rem;
     margin-bottom: 1.5rem;
   }
 
@@ -264,15 +220,6 @@ main-menu-list,
     margin: 0.75rem 0;
   }
 
-  .category-list,
-  sub-menu-list,
-  main-menu-list,
-  .menu-list {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-  }
-
   .category-list {
     grid-row: 2;
     padding: 0 1.25rem;
@@ -281,8 +228,6 @@ main-menu-list,
 
   .main-menu-list {
     grid-row: 3;
-    justify-content: flex-end;
-    align-items: flex-end;
     padding: 1.5rem 1.25rem 0.5rem 0.75rem;
     height: 100%;
     background-color: var(--accent-color);
@@ -295,11 +240,6 @@ main-menu-list,
   }
 
   .main-menu-item {
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: row;
-    width: 100%;
-    align-items: center;
     padding: 0.5rem 0.5rem;
     cursor: pointer;
     color: #fff;
@@ -307,7 +247,6 @@ main-menu-list,
 
   .menu-item-active {
     background-color: #9fabd4;
-    border-radius: 0.25rem;
   }
 
   .main-menu-item.menu-item-active {

@@ -2,12 +2,7 @@
   <NotFoundView v-if="useErrorStore().error" />
   <div v-else class="site-content dashboard">
     <Transition name="side-pop-menu">
-      <NavigationDashboard
-        v-show="isNavOpen"
-        :categories="categories"
-        @changeView="(position) => changeView(position)"
-        @closeNav="isNavOpen = !isMobile || false"
-      />
+      <NavigationDashboard v-show="isNavOpen" @closeNav="isNavOpen = !isMobile || false" />
     </Transition>
     <div class="dashboard-inner">
       <div class="dashboard-title-wrap">
@@ -18,45 +13,67 @@
           @click="isNavOpen = true"
         />
       </div>
-      <div class="dashboard-section">
-        <div class="dashboard-section-title">{{ currentView.menuItemName }}</div>
-        <component
-          :is="currentView.component"
-          :event-data="keyDatesMap.get(currentView.routeName)"
-          :route-name="currentView.routeName"
-        />
+      <div v-if="currentMenuItem" class="dashboard-section">
+        <div class="dashboard-section-title">{{ currentMenuItem.name }}</div>
+        <WelcomeView v-if="currentMenuItem.routeName === 'home'" />
+        <div v-else class="dashboard-event">
+          <div v-for="(event, i) in getEvents(currentMenuItem.id)" :key="i" class="event-inner">
+            <div v-if="getEvents(currentMenuItem.id).length > 1" class="event-inner-name">
+              {{ event.name }}
+            </div>
+            <StatusBar :id="currentMenuItem.routeName + i" :event-data="event" />
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
-import type { MenuPositionType } from './data/menu-position.data'
-import type { MenuItemType } from './data/menu-item.data'
+import { getCurrentInstance, onMounted, ref, watch } from 'vue'
+import type { MenuItemType } from '../../data/menu-item.data'
 import NavigationDashboard from './components/NavigationDashboard.vue'
-import { categories, keyDatesMap } from './data/data'
 import NotFoundView from '../not-found/NotFoundView.vue'
 import { useErrorStore } from '@/stores/router'
+import StatusBar from './components/StatusBar.vue'
+import { useRoute } from 'vue-router'
+import { getEvents, getMenuItemByRouteName } from '@/data/data'
+import WelcomeView from './WelcomeView.vue'
 
-const currentMenuPosition = ref<MenuPositionType>([null, 0])
+const home: MenuItemType = {
+  id: -1,
+  name: 'Истекут в течении 30 дней',
+  routeName: 'home',
+  categoryId: -1
+}
+
+const currentMenuItem = ref<MenuItemType>(home)
 const isNavOpen = ref(false)
 const isMobile = ref(false)
 
-const currentView = computed((): MenuItemType => {
-  return categories[currentMenuPosition.value[0] ?? categories.length - 1].menuItems[
-    currentMenuPosition.value[1]
-  ]
-})
+const route = useRoute()
 
-const changeView = function (position: MenuPositionType | undefined) {
-  if (typeof position !== 'undefined') {
-    currentMenuPosition.value[0] = position[0]
-    currentMenuPosition.value[1] = position[1]
+const setView = function (routeName: string) {
+  if (routeName === 'home') {
+    currentMenuItem.value = home
   } else {
-    useErrorStore().openError()
+    let menuItem: MenuItemType | undefined = getMenuItemByRouteName(routeName)
+    if (menuItem) {
+      currentMenuItem.value = menuItem
+      getCurrentInstance()?.update
+    } else {
+      useErrorStore().openError()
+    }
   }
 }
+
+watch(
+  route,
+  () => {
+    setView(typeof route.params.id === 'string' ? route.params.id : route.params.id[0])
+  },
+  { immediate: true }
+)
 
 onMounted(() => {
   addEventListener('resize', () => {
@@ -80,6 +97,7 @@ onMounted(() => {
 
 .dashboard {
   background-color: #fff;
+  overflow-y: scroll;
 }
 
 .dashboard-inner {
@@ -131,6 +149,22 @@ img.dashboard-arrow {
   transform: translateX(100%);
 }
 
+.dashboard-event * {
+  transition: none;
+}
+
+.dashboard-event {
+  margin-bottom: 3rem;
+}
+
+.event-inner {
+  margin-bottom: 3.5rem;
+}
+
+.event-inner-name {
+  margin-bottom: 1.75rem;
+}
+
 @media only screen and (min-width: 1024px) {
   .side-pop-menu-enter-active,
   .side-pop-menu-leave-active {
@@ -142,38 +176,24 @@ img.dashboard-arrow {
     transform: none;
   }
 
-  .site-content {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    right: 0;
-  }
-
   .dashboard {
     background-color: var(--backdrop-color-desktop);
   }
 
   .dashboard-inner {
     width: calc(100% - var(--side-menu-desktop-width));
-    position: absolute;
     left: var(--side-menu-desktop-width);
-    height: fit-content;
     padding: 0 2.5rem 3rem 2.5rem;
     background-color: var(--backdrop-color-desktop);
   }
 
   .dashboard-title-wrap {
     width: fit-content;
-    height: calc(1.75rem * 0.1 + var(--dashboard-baseline-top-desktop));
+    height: 3.2rem;
     box-shadow: none;
     padding: 0;
     margin-bottom: 3rem;
     align-items: flex-end;
-  }
-
-  .dashboard-title {
-    font-size: 1.75rem;
   }
 
   .dashboard-arrow {
@@ -181,17 +201,9 @@ img.dashboard-arrow {
   }
 
   .dashboard-section {
-    width: 100%;
-    height: fit-content;
     min-height: 60vh;
     padding: 2.5rem 2rem;
-    background-color: #fff;
     border-radius: 0.5rem;
-  }
-
-  .dashboard-section-title {
-    font-size: 1.25rem;
-    margin-bottom: 2rem;
   }
 }
 </style>

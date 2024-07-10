@@ -12,11 +12,6 @@
 
   /*desktop*/
   --side-menu-desktop-width: 25%;
-  --logo-width-desktop: 10rem;
-  --logo-margin-top-desktop: 1rem;
-  --dashboard-baseline-top-desktop: calc(
-    var(--logo-margin-top-desktop) + var(--logo-width-desktop) * 0.27 * 0.67
-  );
 }
 
 * {
