@@ -10,35 +10,31 @@
       <div class="category-list">
         <div
           class="category-item"
-          v-for="(category, categoryIndex) in getCategories()"
+          v-for="(category, categoryIndex) in props.allData"
           :key="categoryIndex"
         >
-          <div class="category-name">{{ category.name }}</div>
+          <div class="category-name">{{ category.category_data.name }}</div>
           <div class="sub-menu-list">
             <router-link
-              v-for="(menuItem, menuItemIndex) in getMenuItems(category.id)"
+              v-for="(menuItem, menuItemIndex) in category.menu_items"
               :key="menuItemIndex"
-              :to="{ name: 'DashboardView', params: { id: menuItem.routeName } }"
+              :to="{ name: 'StatusDashboard', params: { id: menuItem.menu_item_data.route_name } }"
               @click="emits('closeNav', true)"
             >
               <div
                 class="sub-menu-item"
                 :class="{
-                  'menu-item-active': isActiveMenuItem(menuItem.routeName)
+                  'menu-item-active': isActiveMenuItem(menuItem.menu_item_data.route_name)
                 }"
               >
-                {{ menuItem.name }}
+                {{ menuItem.menu_item_data.name }}
               </div>
             </router-link>
           </div>
         </div>
       </div>
-
       <div class="main-menu-list">
-        <router-link
-          :to="{ name: 'DashboardView', params: { id: 'home' } }"
-          @click="emits('closeNav', true)"
-        >
+        <router-link to="/home" @click="emits('closeNav', true)">
           <div
             class="main-menu-item"
             :class="{
@@ -55,17 +51,29 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
-import { getCategories, getMenuItems } from '@/data/data'
+import type { LoadRawCategory } from '@/types/category'
+import { type PropType } from 'vue'
+
+const props = defineProps({
+  allData: { type: Array as PropType<LoadRawCategory[]>, required: true },
+  currentRouteName: { type: String, required: false }
+})
 
 const emits = defineEmits<{
   (e: 'closeNav', value: true): void
 }>()
 
+/*
 const route = useRoute()
 
 const isActiveMenuItem = function (routeName: string) {
   if (routeName && routeName === route.params.id) return true
+  return false
+}
+*/
+
+const isActiveMenuItem = function (routeName: string) {
+  if (routeName && routeName === props.currentRouteName) return true
   return false
 }
 

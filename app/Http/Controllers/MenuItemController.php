@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\EventController;
 use App\Models\Event;
 use App\Models\MenuItem;
+use ErrorException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -15,8 +16,13 @@ class MenuItemController extends Controller
         return MenuItem::orderBy('name')->get();
     }
 
-    public function events($id) {
-        return Event::orderBy('name')->get()->where("menu_item_id", $id);
+    public function events($routeName) {
+        $menuItem = MenuItem::all()->where('route_name', '=', $routeName)->first();
+
+        $data['menu_item'] = $menuItem;
+        $data['events'] = Event::where("menu_item_id", '=', $menuItem->id)->get();
+            
+        return $data;
     }
 
     public function show($id) {
@@ -24,10 +30,9 @@ class MenuItemController extends Controller
     }
 
     function store(Request $request) {
-
-        $menuItem = MenuItem::orderBy('name')->get()->where("route_name", $request['route_name']);
-
-        if ($menuItem) {
+        $menuItem = MenuItem::all()->where("route_name", $request['route_name']);
+        
+        if ($menuItem->isNotEmpty()) {
             $request["menu_item_id"] = $menuItem[0]->id;
 
             try {

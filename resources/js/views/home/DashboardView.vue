@@ -2,7 +2,12 @@
   <NotFoundView v-if="useErrorStore().error" />
   <div v-else class="site-content dashboard">
     <Transition name="side-pop-menu">
-      <NavigationDashboard v-show="isNavOpen" @closeNav="isNavOpen = !isMobile || false" />
+      <NavigationDashboard
+        v-show="isNavOpen"
+        :all-data="data"
+        :current-route-name="currentMenuItem?.menu_item_data.route_name"
+        @closeNav="isNavOpen = !isMobile || false"
+      />
     </Transition>
     <div class="dashboard-inner">
       <div class="dashboard-title-wrap">
@@ -13,17 +18,10 @@
           @click="isNavOpen = true"
         />
       </div>
-      <div v-if="currentMenuItem" class="dashboard-section">
-        <div class="dashboard-section-title">{{ currentMenuItem.name }}</div>
-        <WelcomeView v-if="currentMenuItem.routeName === 'home'" />
-        <div v-else class="dashboard-event">
-          <div v-for="(event, i) in getEvents(currentMenuItem.id)" :key="i" class="event-inner">
-            <div v-if="getEvents(currentMenuItem.id).length > 1" class="event-inner-name">
-              {{ event.name }}
-            </div>
-            <StatusBar :id="currentMenuItem.routeName + i" :event-data="event" />
-          </div>
-        </div>
+      <div class="dashboard-section">
+        <RouterView v-slot="{ Component }">
+          <component :is="Component" :component-data="currentMenuItem" :all-data="data" />
+        </RouterView>
       </div>
     </div>
   </div>
@@ -31,23 +29,27 @@
 
 <script setup lang="ts">
 import { getCurrentInstance, onMounted, ref, watch } from 'vue'
-import type { MenuItemType } from '../../data/menu-item.data'
+import type { LoadRawMenuItem } from '@/types/menu-item'
 import NavigationDashboard from './components/NavigationDashboard.vue'
 import NotFoundView from '../not-found/NotFoundView.vue'
-import { useErrorStore } from '@/stores/router'
-import StatusBar from './components/StatusBar.vue'
-import { useRoute } from 'vue-router'
-import { getEvents, getMenuItemByRouteName } from '@/data/data'
-import WelcomeView from './WelcomeView.vue'
+import { useErrorStore } from '@/stores/error'
+import { RouterView, useRoute } from 'vue-router'
+import Loader from '@/components/Loader.vue'
+import { useFetchAllData } from '@/composables/useFetch'
 
-const home: MenuItemType = {
-  id: -1,
-  name: 'Истекут в течении 30 дней',
-  routeName: 'home',
-  categoryId: -1
+const { data, mapRouteToComponent, loader, messageOnSubmit } = useFetchAllData()
+
+const home: LoadRawMenuItem = {
+  menu_item_data: {
+    id: -1,
+    name: '',
+    route_name: 'home',
+    category_id: -1
+  },
+  events: []
 }
 
-const currentMenuItem = ref<MenuItemType>(home)
+const currentMenuItem = ref<LoadRawMenuItem | undefined>(undefined)
 const isNavOpen = ref(false)
 const isMobile = ref(false)
 
@@ -56,21 +58,35 @@ const route = useRoute()
 const setView = function (routeName: string) {
   if (routeName === 'home') {
     currentMenuItem.value = home
+    return
+  }
+
+  const newMenuItem: LoadRawMenuItem | undefined = mapRouteToComponent.value.get(routeName)
+
+  if (newMenuItem) {
+    currentMenuItem.value = {
+      menu_item_data: newMenuItem.menu_item_data,
+      events: newMenuItem.events
+    }
+    //getCurrentInstance()?.update
   } else {
-    let menuItem: MenuItemType | undefined = getMenuItemByRouteName(routeName)
-    if (menuItem) {
-      currentMenuItem.value = menuItem
-      getCurrentInstance()?.update
-    } else {
+    if (mapRouteToComponent.value.size) {
       useErrorStore().openError()
+      getCurrentInstance()?.update
     }
   }
 }
 
+watch(loader, () => {
+  const routeName = typeof route.params.id === 'string' ? route.params.id : route.params.id[0]
+  setView(routeName)
+})
+
 watch(
   route,
   () => {
-    setView(typeof route.params.id === 'string' ? route.params.id : route.params.id[0])
+    const routeName = typeof route.params.id === 'string' ? route.params.id : route.params.id[0]
+    setView(routeName)
   },
   { immediate: true }
 )
@@ -87,17 +103,10 @@ onMounted(() => {
 </script>
 
 <style>
-.site-content {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  right: 0;
-}
-
 .dashboard {
   background-color: #fff;
   overflow-y: scroll;
+  min-height: 100vh;
 }
 
 .dashboard-inner {
@@ -105,7 +114,6 @@ onMounted(() => {
   position: absolute;
   height: fit-content;
   padding: 0;
-  background-color: #fff;
 }
 
 .dashboard-title-wrap {
@@ -120,7 +128,7 @@ onMounted(() => {
 }
 
 .dashboard-title {
-  font-size: 1.75rem;
+  font-size: 1.25rem;
 }
 
 img.dashboard-arrow {
@@ -184,16 +192,16 @@ img.dashboard-arrow {
     width: calc(100% - var(--side-menu-desktop-width));
     left: var(--side-menu-desktop-width);
     padding: 0 2.5rem 3rem 2.5rem;
-    background-color: var(--backdrop-color-desktop);
   }
 
   .dashboard-title-wrap {
-    width: fit-content;
+    width: 100%;
     height: 3.2rem;
     box-shadow: none;
     padding: 0;
     margin-bottom: 3rem;
     align-items: flex-end;
+    text-align: left;
   }
 
   .dashboard-arrow {

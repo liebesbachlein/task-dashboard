@@ -1,4 +1,4 @@
-import type { EventType } from './event.data'
+import type { Event } from './event'
 
 export const getDateString = function (date: Date) {
   const dayStr = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()
@@ -6,9 +6,8 @@ export const getDateString = function (date: Date) {
   return `${dayStr}.${monthStr}.${date.getFullYear()}`
 }
 
-export const getInfo = function (eventData: EventType) {
-  const differenceInMinutes =
-    (eventData.until.getTime() - new Date(Date.now()).getTime()) / (1000 * 60)
+export const getInfo = function (event: Event) {
+  const differenceInMinutes = (event.until.getTime() - new Date(Date.now()).getTime()) / (1000 * 60)
 
   if (differenceInMinutes <= 0) {
     return 'Срок истек'
@@ -90,9 +89,9 @@ export const getMinutesStr = function (minutes: number) {
   return 'минут'
 }
 
-export const isDueIn = function (eventData: EventType) {
+export const isDueIn = function (event: Event) {
   const differenceInDays =
-    (eventData.until.getTime() - new Date(Date.now()).getTime()) / (1000 * 60 * 60 * 24)
+    (event.until.getTime() - new Date(Date.now()).getTime()) / (1000 * 60 * 60 * 24)
 
   if (differenceInDays <= 30) {
     return true

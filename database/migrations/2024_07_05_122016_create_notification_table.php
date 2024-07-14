@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('notification_table', function (Blueprint $table) {
             $table->increments('id')->primary();
             $table->string('email', length: 255)->unique();
-            $table->integer('menu_item_id')->unsigned();
-            $table->foreign('menu_item_id')->references('id')->on('menu_item_table')->onDelete('cascade');
+            $table->integer('event_id')->unsigned();
+            $table->foreign('event_id')->references('id')->on('event_table')->onDelete('cascade');
             $table->timestamps();
         });
     }

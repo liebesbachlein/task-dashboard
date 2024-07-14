@@ -1,14 +1,17 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
-export const useErrorStore = defineStore('error', () => {
-  const error = ref(false)
-  function openError() {
-    error.value = true
+export const useRouterStore = defineStore('router', () => {
+  const router = ref('home')
+  function setRouter(newRouter: string) {
+    router.value = newRouter
   }
-  function closeError() {
-    error.value = false
+  function resetRouter() {
+    router.value = 'home'
+  }
+  function getRouter() {
+    return router.value
   }
 
-  return { error, openError, closeError }
+  return { setRouter, resetRouter, getRouter }
 })

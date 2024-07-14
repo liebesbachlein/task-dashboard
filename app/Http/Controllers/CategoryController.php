@@ -36,12 +36,12 @@ class CategoryController extends Controller
         foreach($categories as $category) {
             $cat_arr = [];
             $cat_arr['category_data'] = $category;
-            $menuItems = MenuItem::orderBy('name')->get()->where("category_id", $category->id);
+            $menuItems = MenuItem::orderBy('name')->where("category_id", $category->id)->get();
             $menu_arr = [];
             foreach($menuItems as $menuItem) {
                 $event_arr = [];
                 $event_arr['menu_item_data'] = $menuItem;
-                $event_arr['events'] = Event::orderBy('name')->get()->where('menu_item_id', $menuItem->id);
+                $event_arr['events'] = Event::orderBy('name')->where('menu_item_id', $menuItem->id)->get();
                 $menu_arr[] = $event_arr;
             }
             $cat_arr['menu_items'] = $menu_arr;
