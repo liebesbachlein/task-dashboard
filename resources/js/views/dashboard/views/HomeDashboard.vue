@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-section-title">Истекут в течении 30 дней</div>
-  <div class="main" v-if="eventsDueInMonth.length">
-    <div class="event-due" v-for="(eventDue, i) in eventsDueInMonth" :key="i">
+  <div class="main" v-if="getEventsDueInMonth(props.allData)">
+    <div class="event-due" v-for="(eventDue, i) in getEventsDueInMonth(props.allData)" :key="i">
       <div class="event-due-name">
         {{ eventDue.event.name }}
       </div>
@@ -11,9 +11,7 @@
       <router-link :to="`/${eventDue.routeName}`" class="event-due-link">Перейти</router-link>
     </div>
   </div>
-  <div class="main" v-else>
-    <div class="main-text">Нет ближайших событий</div>
-  </div>
+  <div class="main" v-else></div>
 </template>
 
 <script setup lang="ts">
@@ -32,13 +30,12 @@ type EventDue = {
   event: Event
 }
 
-const getEventsDueInMonth = function (): EventDue[] {
+const getEventsDueInMonth = function (data: LoadRawCategory[]): EventDue[] {
   const eventsDue: EventDue[] = []
-
-  for (let i = 0; i < props.allData.length; i++) {
-    for (let j = 0; j < props.allData[i].menu_items.length; j++) {
-      const events = normalizeRawData(props.allData[i].menu_items[j])
-      const routeName = props.allData[i].menu_items[j].menu_item_data.route_name
+  for (let i = 0; i < data.length; i++) {
+    for (let j = 0; j < data[i].menu_items.length; j++) {
+      const events = normalizeRawData(data[i].menu_items[j])
+      const routeName = data[i].menu_items[j].menu_item_data.route_name
       for (let k = 0; k < events.length; k++) {
         if (isDueIn(events[k])) {
           eventsDue.push({
@@ -57,8 +54,6 @@ const getEventsDueInMonth = function (): EventDue[] {
   }
   return eventsDue
 }
-
-const eventsDueInMonth: EventDue[] = getEventsDueInMonth()
 </script>
 
 <style>
@@ -83,7 +78,6 @@ const eventsDueInMonth: EventDue[] = getEventsDueInMonth()
 .event-due-link {
   grid-row: 1;
   grid-column: 2;
-  border: 1x solid red;
   text-decoration: underline;
   color: var(--accent-color);
 }

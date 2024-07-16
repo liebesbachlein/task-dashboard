@@ -1,8 +1,8 @@
 <template>
-  <div class="dashboard-section dashboard-section-admin">
+  <div class="dashboard-section dashboard-section-role">
     <div class="form-wrapper">
       <div class="form-large-title">Добавить событие</div>
-      <form class="form-admin" @submit.prevent="handleSubmit">
+      <form class="form-role" @submit.prevent="handleSubmit">
         <label>ID (e.g. ssl-certificates, app-store-dates)</label>
         <input :class="{ invalid: routeNameError }" type="text" v-model="routeName" required />
 

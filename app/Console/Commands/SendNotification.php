@@ -1,39 +1,41 @@
 <?php
 
 namespace App\Console\Commands;
+
+use Illuminate\Console\Command;
+
+
 use DateTime;
 use DateInterval;
 use Carbon\Carbon;
 use App\Models\Event;
 use App\Models\MenuItem;
 use App\Models\Notification;
-use Illuminate\Console\Command;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\NotificationMailController;
 
-class SendEmails extends Command
+class SendNotification extends Command
 {
-  /**
-   * The name and signature of the console command.
-   *
-   * @var string
-   */
-  protected $signature = 'notify';
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'app:send-notification';
 
-  /**
-   * The console command description.
-   *
-   * @var string
-   */
-  protected $description = 'Send test notification mails';
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Send test notification mails';
 
-  /**
-   * Execute the console command.
-   */
-  public function handle()
-  {
-
-    $now = Carbon::now();
+    /**
+     * Execute the console command.
+     */
+    public function handle()
+    {
+        $now = Carbon::now();
     $notifications = Notification::all();
     $oneMonthInterval = DateInterval::createFromDateString('1 month');
     $oneWeekInterval = DateInterval::createFromDateString('7 days');
@@ -54,15 +56,24 @@ class SendEmails extends Command
           } else {
             $emailData['text'] = "$introText $menuItem->name $event->name (в $event->until)";
           }
+
+          try {
+            (new NotificationMailController())->sendMail($emailData);
+            
+          } catch (\Throwable $th) {
+            throw $th;
+            return;
+          } 
+
           $newNotification = $notification->toArray();
           $newNotification['isOneDayChecked'] = true;
           $newNotification['isThreeDaysChecked'] = true;
           $newNotification['isOneWeekChecked'] = true;
           $newNotification['isOneMonthChecked'] = true;
-
           Notification::destroy($notification->id);
 
-          (new NotificationMailController())->sendMail($emailData);
+
+          
       } else if ($now->add($threeDaysInterval) >= $dateUntil && !$notification->isThreeDayChecked) {
         $emailData = [];
         $emailData['email'] = $notification->email;
@@ -74,7 +85,13 @@ class SendEmails extends Command
         } else {
           $emailData['text'] = "$introText $menuItem->name $event->name (в $event->until)";
         }
-
+        try {
+          (new NotificationMailController())->sendMail($emailData);
+          
+        } catch (\Throwable $th) {
+          throw $th;
+          return;
+        }  
         $newNotification = $notification->toArray();
         $newNotification['isThreeDaysChecked'] = true;
         $newNotification['isOneWeekChecked'] = true;
@@ -82,7 +99,6 @@ class SendEmails extends Command
 
         Notification::find($notification->id)->update($newNotification);
         
-        (new NotificationMailController())->sendMail($emailData);
     } else if ($now->add($oneWeekInterval) >= $dateUntil && !$notification->isOneWeekChecked) {
         $emailData = [];
         $emailData['email'] = $notification->email;
@@ -94,6 +110,13 @@ class SendEmails extends Command
         } else {
           $emailData['text'] = "$introText $menuItem->name $event->name (в $event->until)";
         }
+        try {
+          (new NotificationMailController())->sendMail($emailData);
+          
+        } catch (\Throwable $th) {
+          throw $th;
+          return;
+        } 
 
         $newNotification = $notification->toArray();
         $newNotification['isOneWeekChecked'] = true;
@@ -101,7 +124,6 @@ class SendEmails extends Command
 
         Notification::find($notification->id)->update($newNotification);
 
-        (new NotificationMailController())->sendMail($emailData);
       } else if ($now->add($oneMonthInterval) >= $dateUntil && !$notification->isOneMonthChecked) {
         $emailData = [];
         $emailData['email'] = $notification->email;
@@ -113,15 +135,20 @@ class SendEmails extends Command
         } else {
           $emailData['text'] = "$introText $menuItem->name $event->name (в $event->until)";
         }
+
+        try {
+          (new NotificationMailController())->sendMail($emailData);
+          
+        } catch (\Throwable $th) {
+          throw $th;
+          return;
+        } 
         
         $newNotification = $notification->toArray();
         $newNotification['isOneMonthChecked'] = true;
 
         Notification::find($notification->id)->update($newNotification);
-
-
-        (new NotificationMailController())->sendMail($emailData);
       } 
     }
-  }
+}
 }

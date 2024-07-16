@@ -3,11 +3,12 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Dashboard</title>  
-        @vite(['resources/js/app.ts'])
-        @inertiaHead
+        <title>Dashboard</title>
+        @vite(['resources/js/app.js'])
     </head>
     <body>
-        <div id="app">@inertia</div>
+        <div id="app">
+            <LoginView/>
+        </div>
     </body>
 </html>

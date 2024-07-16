@@ -19,7 +19,7 @@ class MenuItemController extends Controller
     public function events($routeName) {
         $menuItem = MenuItem::all()->where('route_name', '=', $routeName)->first();
 
-        $data['menu_item'] = $menuItem;
+        $data['menu_item_data'] = $menuItem;
         $data['events'] = Event::where("menu_item_id", '=', $menuItem->id)->get();
             
         return $data;

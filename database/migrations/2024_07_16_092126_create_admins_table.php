@@ -9,15 +9,14 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-
-    private $table_name = 'item_table';
-    
     public function up(): void
     {
-        Schema::create( $this->table_name, function (Blueprint $table) {
-            $table->id();
-            $table->string('name', length: 255);
-            $table->date('birth_date');
+        Schema::create('admins', function (Blueprint $table) {
+            $table->increments('id')->primary();
+            $table->string('email', length:255)->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('item_table');
+        Schema::dropIfExists('admins');
     }
 };

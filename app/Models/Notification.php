@@ -11,6 +11,11 @@ class Notification extends Model
     //use HasFactory;
 
     protected $table = 'notification_table';
-    protected $fillable = ['email', 'event_id'];
-
+    protected $fillable = ['email', 
+    'user_id',
+    'event_id', 
+    'isOneMonthChecked', 
+    'isOneWeekChecked', 
+    'isThreeDaysChecked', 
+    'isOneDayChecked'];
 }

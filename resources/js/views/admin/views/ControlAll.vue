@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard-section dashboard-section-admin">
+  <div class="dashboard-section dashboard-section-role">
     <div class="admin-controll-all">
       <div v-if="loader" class="loader-wrapper">
         <Loader :isBlue="true" />
@@ -83,7 +83,7 @@ ul {
   color: var(--accent-color);
 }
 
-@media only screen and (min-width: 1024px) {
+@media only screen and (min-width: 950px) {
   .admin-controll-all {
     min-height: 50vh;
   }

@@ -1,8 +1,8 @@
 <template>
-  <div class="dashboard-section dashboard-section-admin">
+  <div class="dashboard-section dashboard-section-role">
     <div class="form-wrapper">
       <div class="form-large-title">Добавить категорию</div>
-      <form class="form-admin" @submit.prevent="handleSubmit">
+      <form class="form-role" @submit.prevent="handleSubmit">
         <label>Название категории</label>
         <input :class="{ invalid: nameError }" type="text" v-model="name" required />
 

@@ -13,7 +13,9 @@
           v-for="(category, categoryIndex) in props.allData"
           :key="categoryIndex"
         >
-          <div class="category-name">{{ category.category_data.name }}</div>
+          <div v-if="category.menu_items.length > 0" class="category-name">
+            {{ category.category_data.name }}
+          </div>
           <div class="sub-menu-list">
             <router-link
               v-for="(menuItem, menuItemIndex) in category.menu_items"
@@ -42,7 +44,7 @@
             }"
           >
             <img src="@/assets/icons/home.svg" />
-            {{ 'Главная' }}
+            Главная
           </div>
         </router-link>
       </div>
@@ -115,6 +117,7 @@ const closeNav = () => emits('closeNav', true)
 
 .dashboard-logo img {
   max-width: 85%;
+  max-height: 4rem;
 }
 
 .dashboard-logo {
@@ -182,7 +185,13 @@ main-menu-list,
   display: none;
 }
 
-@media only screen and (min-width: 1024px) {
+@media only screen and (min-width: 565px) {
+  .dashboard-nav {
+    width: 50%;
+  }
+}
+
+@media only screen and (min-width: 950px) {
   .dashboard-nav {
     position: fixed;
     left: 0;
@@ -262,6 +271,7 @@ main-menu-list,
   }
 
   .main-menu-item img {
+    display: block;
     max-width: 1.5rem;
     margin-right: 0.5rem;
     padding-bottom: 2px;

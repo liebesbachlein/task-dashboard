@@ -139,7 +139,7 @@ onUpdated(() => {
   font-size: 0.875rem;
 }
 
-@media only screen and (min-width: 1024px) {
+@media only screen and (min-width: 950px) {
   .status-bar {
     width: 75%;
   }

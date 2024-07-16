@@ -1,13 +1,14 @@
 <template>
   <router-link :to="props.route" class="back-to-page">
     <img class="back-to-page-arrow" src="@/assets/icons/arrow-left.svg" />
-    <div class="back-to-page-text">Назад</div>
+    <div class="back-to-page-text">{{ title ?? 'Назад' }}</div>
   </router-link>
 </template>
 
 <script setup lang="ts">
 const props = defineProps({
-  route: { type: String, required: true }
+  route: { type: String, required: true },
+  title: { type: String, required: false }
 })
 </script>
 
@@ -29,7 +30,7 @@ img.back-to-page-arrow {
   font-size: 1rem;
 }
 
-@media only screen and (min-width: 1024px) {
+@media only screen and (min-width: 950px) {
   .back-to-page-text {
     font-size: 1rem;
   }

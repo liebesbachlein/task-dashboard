@@ -3,7 +3,7 @@
 :root {
   --backdrop-color-desktop: #f0f2f1;
   --accent-color: #3f5bb5;
-  --bright-red: #EE4B2B;
+  --bright-red: #ee4b2b;
 
   --plain-font: 'Inter', sans-serif;
 
@@ -41,12 +41,12 @@
 }
 
 .button-delete {
-  background-color: var(--bright-red); 
+  background-color: var(--bright-red);
   margin-top: 1rem;
   box-shadow:
     -2px 2px 10px 0px rgba(237, 236, 236, 0.35),
     2px -2px 10px 0px rgba(237, 236, 236, 0.35);
-    box-shadow: none;
+  box-shadow: none;
 }
 
 .button.button-delete:hover {
@@ -58,8 +58,8 @@
 }
 
 .button:disabled {
-  background-color: #94CDE0;
-  color: #FFF;
+  background-color: #94cde0;
+  color: #fff;
   box-shadow: none;
   cursor: default;
 }
@@ -75,7 +75,8 @@
 .standalone-box-wrapper {
   height: 100vh;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   background-color: var(--backdrop-color-desktop);
   padding: 5rem 0;
 }
@@ -87,7 +88,7 @@
   padding: 2rem 2rem 1rem 2rem;
   display: flex;
   flex-direction: column;
-  border-radius: 0.5rem;  
+  border-radius: 0.5rem;
 }
 
 .standalone-box img {
@@ -106,12 +107,13 @@
   width: 100%;
 }
 
-label {
+label,
+.label-link {
   display: inline-block;
   font-size: 0.875rem;
   font-weight: 400;
-  margin-bottom: 0.5rem; 
-}  
+  margin-bottom: 0.5rem;
+}
 
 option {
   font-size: 1rem;
@@ -119,21 +121,23 @@ option {
   font-family: var(--plain-font);
 }
 
-label.label-message {
+.label-message {
+  display: block;
   text-align: center;
-  margin: 1rem 0 0 0; 
+  margin: 1rem auto 0 auto;
   color: #5b5b5b;
-  width: 100%;
 }
 
-input:focus, select:focus {
-  border: 1px solid #FFF;
+input:focus,
+select:focus {
+  border: 1px solid #fff;
   outline: 1px solid #454545;
 }
 
-input, select {
+input,
+select {
   width: 100%;
-  border: 1px solid #C4DAE5;
+  border: 1px solid #c4dae5;
   border-radius: 0.25rem;
   color: #454545;
   margin-bottom: 1.5rem;
@@ -170,10 +174,13 @@ input.button {
   align-items: center;
 }
 
+@media only screen and (min-width: 565px) {
+  .standalone-box {
+    width: 65%;
+  }
+}
 
-
-@media only screen and (min-width: 1024px) {
-
+@media only screen and (min-width: 950px) {
   .form-wrapper {
     width: 100%;
   }

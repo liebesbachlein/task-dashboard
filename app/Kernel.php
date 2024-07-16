@@ -9,10 +9,12 @@ class Kernel extends ConsoleKernel
 {
     protected $commands = [
         Commands\SendEmails::class,
+        Commands\SendNotification::class,
     ];
 
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('app:send-emails')->everyMinute();
+
+        //$schedule->command('app:send-notification')->evenInMaintenanceMode();
     }
 }

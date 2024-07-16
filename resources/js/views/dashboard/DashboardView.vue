@@ -93,11 +93,11 @@ watch(
 
 onMounted(() => {
   addEventListener('resize', () => {
-    isMobile.value = window.matchMedia('(max-width: 1023px)').matches
+    isMobile.value = window.matchMedia('(max-width: 949px)').matches
     if (!isMobile.value) isNavOpen.value = true
   })
 
-  isMobile.value = window.matchMedia('(max-width: 1023px)').matches
+  isMobile.value = window.matchMedia('(max-width: 949px)').matches
   if (!isMobile.value) isNavOpen.value = true
 })
 </script>
@@ -173,7 +173,7 @@ img.dashboard-arrow {
   margin-bottom: 1.75rem;
 }
 
-@media only screen and (min-width: 1024px) {
+@media only screen and (min-width: 950px) {
   .side-pop-menu-enter-active,
   .side-pop-menu-leave-active {
     transition: none;

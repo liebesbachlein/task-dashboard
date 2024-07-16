@@ -1,11 +1,11 @@
 <template>
-  <div class="site-content dashboard admin-backdrop">
+  <div class="site-content dashboard">
     <Transition name="side-pop-menu">
-      <NavigationAdmin v-show="isNavOpen" @closeNavAdmin="isNavOpen = !isMobile || false" />
+      <NavigationUser v-show="isNavOpen" @closeNavUser="isNavOpen = !isMobile || false" />
     </Transition>
     <div class="dashboard-inner dashboard-inner-role">
       <div class="dashboard-title-wrap">
-        <div class="dashboard-title">Панель администратора</div>
+        <div class="dashboard-title">Личный кабинет</div>
         <img
           class="dashboard-arrow"
           src="@/assets/icons/arrow-left.svg"
@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import NavigationAdmin from './components/NavigationAdmin.vue'
+import NavigationUser from './components/NavigationUser.vue'
 
 const isNavOpen = ref(false)
 const isMobile = ref(false)
@@ -35,23 +35,4 @@ onMounted(() => {
 })
 </script>
 
-<style>
-.admin-backdrop {
-}
-
-.dashboard-inner-role {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.dashboard-section-role {
-  width: 100%;
-}
-
-@media only screen and (min-width: 950px) {
-  .dashboard-section-role {
-    width: 55%;
-  }
-}
-</style>
+<style></style>

@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "63eb3832cb01245f61300af941029035",
+  "content-hash": "ebee396c3a2851c87d54d6a41e8eaed3",
   "packages": [
     {
       "name": "brick/math",
@@ -1049,6 +1049,82 @@
         }
       ],
       "time": "2023-12-03T19:50:20+00:00"
+    },
+    {
+      "name": "inertiajs/inertia-laravel",
+      "version": "v1.3.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/inertiajs/inertia-laravel.git",
+        "reference": "36730d13b1dab9017069004fd458b3e67449a326"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/inertiajs/inertia-laravel/zipball/36730d13b1dab9017069004fd458b3e67449a326",
+        "reference": "36730d13b1dab9017069004fd458b3e67449a326",
+        "shasum": ""
+      },
+      "require": {
+        "ext-json": "*",
+        "laravel/framework": "^8.74|^9.0|^10.0|^11.0",
+        "php": "^7.3|~8.0.0|~8.1.0|~8.2.0|~8.3.0",
+        "symfony/console": "^5.3|^6.0|^7.0"
+      },
+      "require-dev": {
+        "mockery/mockery": "^1.3.3",
+        "orchestra/testbench": "^6.4|^7.0|^8.0|^9.0",
+        "phpunit/phpunit": "^8.0|^9.5.8|^10.4",
+        "roave/security-advisories": "dev-master"
+      },
+      "suggest": {
+        "ext-pcntl": "Recommended when running the Inertia SSR server via the `inertia:start-ssr` artisan command."
+      },
+      "type": "library",
+      "extra": {
+        "laravel": {
+          "providers": [
+            "Inertia\\ServiceProvider"
+          ]
+        },
+        "branch-alias": {
+          "dev-master": "1.x-dev"
+        }
+      },
+      "autoload": {
+        "files": [
+          "./helpers.php"
+        ],
+        "psr-4": {
+          "Inertia\\": "src"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "authors": [
+        {
+          "name": "Jonathan Reinink",
+          "email": "jonathan@reinink.ca",
+          "homepage": "https://reinink.ca"
+        }
+      ],
+      "description": "The Laravel adapter for Inertia.js.",
+      "keywords": [
+        "inertia",
+        "laravel"
+      ],
+      "support": {
+        "issues": "https://github.com/inertiajs/inertia-laravel/issues",
+        "source": "https://github.com/inertiajs/inertia-laravel/tree/v1.3.0"
+      },
+      "funding": [
+        {
+          "url": "https://github.com/reinink",
+          "type": "github"
+        }
+      ],
+      "time": "2024-06-13T01:25:09+00:00"
     },
     {
       "name": "laravel/framework",
@@ -5743,69 +5819,6 @@
   ],
   "packages-dev": [
     {
-      "name": "fakerphp/faker",
-      "version": "v1.23.1",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/FakerPHP/Faker.git",
-        "reference": "bfb4fe148adbf78eff521199619b93a52ae3554b"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/bfb4fe148adbf78eff521199619b93a52ae3554b",
-        "reference": "bfb4fe148adbf78eff521199619b93a52ae3554b",
-        "shasum": ""
-      },
-      "require": {
-        "php": "^7.4 || ^8.0",
-        "psr/container": "^1.0 || ^2.0",
-        "symfony/deprecation-contracts": "^2.2 || ^3.0"
-      },
-      "conflict": {
-        "fzaninotto/faker": "*"
-      },
-      "require-dev": {
-        "bamarni/composer-bin-plugin": "^1.4.1",
-        "doctrine/persistence": "^1.3 || ^2.0",
-        "ext-intl": "*",
-        "phpunit/phpunit": "^9.5.26",
-        "symfony/phpunit-bridge": "^5.4.16"
-      },
-      "suggest": {
-        "doctrine/orm": "Required to use Faker\\ORM\\Doctrine",
-        "ext-curl": "Required by Faker\\Provider\\Image to download images.",
-        "ext-dom": "Required by Faker\\Provider\\HtmlLorem for generating random HTML.",
-        "ext-iconv": "Required by Faker\\Provider\\ru_RU\\Text::realText() for generating real Russian text.",
-        "ext-mbstring": "Required for multibyte Unicode string functionality."
-      },
-      "type": "library",
-      "autoload": {
-        "psr-4": {
-          "Faker\\": "src/Faker/"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": [
-        "MIT"
-      ],
-      "authors": [
-        {
-          "name": "François Zaninotto"
-        }
-      ],
-      "description": "Faker is a PHP library that generates fake data for you.",
-      "keywords": [
-        "data",
-        "faker",
-        "fixtures"
-      ],
-      "support": {
-        "issues": "https://github.com/FakerPHP/Faker/issues",
-        "source": "https://github.com/FakerPHP/Faker/tree/v1.23.1"
-      },
-      "time": "2024-01-02T13:46:09+00:00"
-    },
-    {
       "name": "filp/whoops",
       "version": "2.15.4",
       "source": {
@@ -5926,53 +5939,6 @@
         "source": "https://github.com/hamcrest/hamcrest-php/tree/v2.0.1"
       },
       "time": "2020-07-09T08:09:16+00:00"
-    },
-    {
-      "name": "jspaetzel/phpstyle",
-      "version": "1.7.0",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/jspaetzel/phpstyle.git",
-        "reference": "e06b8993b802ec1d711666af68324784eba7acd2"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/jspaetzel/phpstyle/zipball/e06b8993b802ec1d711666af68324784eba7acd2",
-        "reference": "e06b8993b802ec1d711666af68324784eba7acd2",
-        "shasum": ""
-      },
-      "require": {
-        "composer-plugin-api": "^1.0 || ^2.0",
-        "nette/neon": "^3.3",
-        "php": "^7.3|^8.0",
-        "php-cs-fixer/shim": "^3.8"
-      },
-      "require-dev": {
-        "composer/composer": "^1.0 || ^2.0",
-        "ext-json": "*",
-        "friendsofphp/php-cs-fixer": "^3.14",
-        "phpunit/phpunit": "^9"
-      },
-      "type": "composer-plugin",
-      "extra": {
-        "class": "PHPStyle\\Plugin"
-      },
-      "autoload": {
-        "psr-4": {
-          "PHPStyle\\": "src/"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": [
-        "MIT"
-      ],
-      "description": "PHPStyle - Make prettier PHP fast",
-      "support": {
-        "issues": "https://github.com/jspaetzel/phpstyle/issues",
-        "source": "https://github.com/jspaetzel/phpstyle/tree/1.7.0"
-      },
-      "abandoned": true,
-      "time": "2023-06-27T22:36:12+00:00"
     },
     {
       "name": "laravel/pint",
@@ -6247,74 +6213,6 @@
       "time": "2024-06-12T14:39:25+00:00"
     },
     {
-      "name": "nette/neon",
-      "version": "v3.4.3",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/nette/neon.git",
-        "reference": "c8481c104431c8d94cc88424a1e21f47f8c93280"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/nette/neon/zipball/c8481c104431c8d94cc88424a1e21f47f8c93280",
-        "reference": "c8481c104431c8d94cc88424a1e21f47f8c93280",
-        "shasum": ""
-      },
-      "require": {
-        "ext-json": "*",
-        "php": "8.0 - 8.3"
-      },
-      "require-dev": {
-        "nette/tester": "^2.4",
-        "phpstan/phpstan": "^1.0",
-        "tracy/tracy": "^2.7"
-      },
-      "bin": [
-        "bin/neon-lint"
-      ],
-      "type": "library",
-      "extra": {
-        "branch-alias": {
-          "dev-master": "3.4-dev"
-        }
-      },
-      "autoload": {
-        "classmap": [
-          "src/"
-        ]
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": [
-        "BSD-3-Clause",
-        "GPL-2.0-only",
-        "GPL-3.0-only"
-      ],
-      "authors": [
-        {
-          "name": "David Grudl",
-          "homepage": "https://davidgrudl.com"
-        },
-        {
-          "name": "Nette Community",
-          "homepage": "https://nette.org/contributors"
-        }
-      ],
-      "description": "🍸 Nette NEON: encodes and decodes NEON file format.",
-      "homepage": "https://ne-on.org",
-      "keywords": [
-        "export",
-        "import",
-        "neon",
-        "nette",
-        "yaml"
-      ],
-      "support": {
-        "issues": "https://github.com/nette/neon/issues",
-        "source": "https://github.com/nette/neon/tree/v3.4.3"
-      },
-      "time": "2024-06-26T14:53:59+00:00"
-    },
-    {
       "name": "nunomaduro/collision",
       "version": "v8.1.1",
       "source": {
@@ -6528,58 +6426,6 @@
         "source": "https://github.com/phar-io/version/tree/3.2.1"
       },
       "time": "2022-02-21T01:04:05+00:00"
-    },
-    {
-      "name": "php-cs-fixer/shim",
-      "version": "v3.59.3",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/PHP-CS-Fixer/shim.git",
-        "reference": "c855876e64de3431bc9279f27af7be40d11d7613"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/PHP-CS-Fixer/shim/zipball/c855876e64de3431bc9279f27af7be40d11d7613",
-        "reference": "c855876e64de3431bc9279f27af7be40d11d7613",
-        "shasum": ""
-      },
-      "require": {
-        "ext-json": "*",
-        "ext-tokenizer": "*",
-        "php": "^7.4 || ^8.0"
-      },
-      "replace": {
-        "friendsofphp/php-cs-fixer": "self.version"
-      },
-      "suggest": {
-        "ext-dom": "For handling output formats in XML",
-        "ext-mbstring": "For handling non-UTF8 characters."
-      },
-      "bin": [
-        "php-cs-fixer",
-        "php-cs-fixer.phar"
-      ],
-      "type": "application",
-      "notification-url": "https://packagist.org/downloads/",
-      "license": [
-        "MIT"
-      ],
-      "authors": [
-        {
-          "name": "Fabien Potencier",
-          "email": "fabien@symfony.com"
-        },
-        {
-          "name": "Dariusz Rumiński",
-          "email": "dariusz.ruminski@gmail.com"
-        }
-      ],
-      "description": "A tool to automatically fix PHP code style",
-      "support": {
-        "issues": "https://github.com/PHP-CS-Fixer/shim/issues",
-        "source": "https://github.com/PHP-CS-Fixer/shim/tree/v3.59.3"
-      },
-      "time": "2024-06-16T14:17:34+00:00"
     },
     {
       "name": "phpunit/php-code-coverage",

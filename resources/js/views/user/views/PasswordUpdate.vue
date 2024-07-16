@@ -22,7 +22,6 @@
 </template>
 
 <script setup lang="ts">
-import BackToPage from '../components/BackToPage.vue'
 import router from '@/router'
 import axios from 'axios'
 import { ref, computed } from 'vue'
