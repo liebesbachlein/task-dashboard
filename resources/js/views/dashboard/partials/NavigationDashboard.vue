@@ -47,6 +47,12 @@
             Главная
           </div>
         </router-link>
+        <router-link :to="isLoggedIn ? '/user' : '/login'" @click="emits('closeNav', true)">
+          <div class="main-menu-item">
+            <img src="@/assets/icons/login.svg" />
+            Профиль
+          </div>
+        </router-link>
       </div>
     </div>
   </div>
@@ -54,11 +60,12 @@
 
 <script setup lang="ts">
 import type { LoadRawCategory } from '@/types/category'
-import { type PropType } from 'vue'
+import { getCurrentInstance, type PropType } from 'vue'
 
 const props = defineProps({
   allData: { type: Array as PropType<LoadRawCategory[]>, required: true },
-  currentRouteName: { type: String, required: false }
+  currentRouteName: { type: String, required: false },
+  isLoggedIn: { type: Boolean, required: false }
 })
 
 const emits = defineEmits<{
@@ -209,8 +216,9 @@ main-menu-list,
 
   .dashboard-nav-inner {
     grid-row: 2;
-    grid-template-rows: max-content 70% auto;
+    grid-template-rows: max-content 65% auto;
     padding: 0;
+    position: relative;
   }
 
   .dashboard-nav * {
@@ -244,8 +252,9 @@ main-menu-list,
   }
 
   .main-menu-list {
+    width: 100%;
     grid-row: 3;
-    padding: 1.5rem 1.25rem 0.5rem 0.75rem;
+    padding: 1.5rem 1.25rem 1.5rem 0.75rem;
     height: 100%;
     background-color: var(--accent-color);
   }

@@ -8,6 +8,11 @@
         <img src="@/assets/icons/logo-bcc-invest.svg" />
       </div>
       <div class="category-list">
+        <div class="sub-menu-list">
+          <div class="admin-menu-item" v-if="props.whoIsUser" style="color: var(--accent-color)">
+            {{ props.whoIsUser.email }}
+          </div>
+        </div>
         <div v-for="([routeName, title], i) in menu" :key="i" class="sub-menu-list">
           <router-link :to="routeName" @click="emits('closeNavUser', true)">
             <div
@@ -34,13 +39,23 @@
 <script setup lang="ts">
 import router from '@/router'
 import axios from 'axios'
+import type { PropType } from 'vue'
 import { useRoute } from 'vue-router'
 
 const menu: string[][] = [
   ['/user/home', 'Все уведомления'],
-  ['/user/add-notification', 'Добавить уведомление'],
-  ['/user/settings', 'Сменить пароль']
+  ['/user/add-notification', 'Добавить уведомление']
 ]
+
+const props = defineProps({
+  whoIsUser: {
+    type: Object as PropType<{
+      email: string
+      id: string
+    }>,
+    required: true
+  }
+})
 
 const emits = defineEmits<{
   (e: 'closeNavUser', value: true): void
@@ -71,17 +86,22 @@ const logOut = function () {
 <style>
 .user-color * {
   color: #000;
+  font-size: 1rem;
 }
 .user-color {
-  background-color: rgb(255, 255, 255);
+  background-color: #7d7575;
 }
 
 .user-color .menu-item-active {
   background-color: rgb(71, 109, 21);
-  color: #fff;
+  color: #ffffff;
 }
 
 @media only screen and (min-width: 950px) {
+  .user-color {
+    background-color: rgb(255, 255, 255);
+  }
+
   .user-color .main-menu-list {
     background-color: rgb(71, 109, 21);
   }

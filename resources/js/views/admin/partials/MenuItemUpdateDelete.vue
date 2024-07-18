@@ -23,12 +23,12 @@
         </select>
 
         <div class="submit-button-wrapper">
-          <Loader v-if="loaderUpdate" />
+          <CircularLoader v-if="loaderUpdate" />
           <input type="submit" :disabled="!enableSubmit" class="button" value="Внести изменения" />
         </div>
       </form>
       <div class="submit-button-wrapper">
-        <Loader v-if="loaderDelete" />
+        <CircularLoader v-if="loaderDelete" />
         <div type="submit" class="button button-delete" @click="deleteThis">Удалить</div>
       </div>
       <label v-show="messageOnSubmit.length > 0" class="label-message">{{ messageOnSubmit }}</label>
@@ -40,7 +40,7 @@
 import BackToPage from '../components/BackToPage.vue'
 import type { Category } from '@/types/category'
 import { loadCategories } from '@/types/data'
-import Loader from '@/components/Loader.vue'
+import CircularLoader from '@/components/CircularLoader.vue'
 import router from '@/router'
 import axios from 'axios'
 import { computed, ref } from 'vue'

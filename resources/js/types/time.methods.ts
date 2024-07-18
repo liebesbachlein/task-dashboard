@@ -30,7 +30,7 @@ export const getInfo = function (event: Event) {
 
   const yearsLeft = years ? ` ${years} ${getYearsStr(years)}` : ''
   const monthsLeft = months ? ` ${months} ${getMonthsStr(months)}` : ''
-  const daysLeft = days ? ` ${days} ${getDaysStr(days)}` : ''
+  const daysLeft = !yearsLeft && days ? ` ${days} ${getDaysStr(days)}` : ''
   const hoursLeft =
     !months && !years && days < 7 ? (hours ? ` ${hours} ${getHoursStr(hours)}` : '') : ''
   const minutesLeft =
@@ -44,7 +44,8 @@ export const getDaysStr = function (days: number) {
     if (days % 100 != 11) return 'день'
   }
   if (days % 10 == 2 || days % 10 == 3 || days % 10 == 4) {
-    return 'дня'
+    const mod = days % 10
+    if (days % 100 != 10 + mod) return 'дня'
   }
   return 'дней'
 }
@@ -54,7 +55,8 @@ export const getMonthsStr = function (months: number) {
     if (months % 100 != 11) return 'месяц'
   }
   if (months % 10 == 2 || months % 10 == 3 || months % 10 == 4) {
-    return 'месяца'
+    const mod = months % 10
+    if (months % 100 != 10 + mod) return 'месяца'
   }
   return 'месяцев'
 }
@@ -64,7 +66,8 @@ export const getYearsStr = function (years: number) {
     if (years % 100 != 11) return 'год'
   }
   if (years % 10 == 2 || years % 10 == 3 || years % 10 == 4) {
-    return 'года'
+    const mod = years % 10
+    if (years % 100 != 10 + mod) return 'года'
   }
   return 'лет'
 }
@@ -74,7 +77,8 @@ export const getHoursStr = function (hours: number) {
     if (hours % 100 != 11) return 'час'
   }
   if (hours % 10 == 2 || hours % 10 == 3 || hours % 10 == 4) {
-    return 'часа'
+    const mod = hours % 10
+    if (hours % 100 != 10 + mod) return 'часа'
   }
   return 'часов'
 }
@@ -84,7 +88,8 @@ export const getMinutesStr = function (minutes: number) {
     if (minutes % 100 != 11) return 'минуту'
   }
   if (minutes % 10 == 2 || minutes % 10 == 3 || minutes % 10 == 4) {
-    return 'минуты'
+    const mod = minutes % 10
+    if (minutes % 100 != 10 + mod) return 'минуты'
   }
   return 'минут'
 }

@@ -1,46 +1,18 @@
-<template>
-  <div
-    v-if="componentData && componentData.events && componentData.events.length <= 1"
-    class="dashboard-section-title"
-  >
-    {{ componentData.menu_item_data.name }}
-  </div>
-  <div class="dashboard-event">
-    <div v-for="(event, i) in normalizeRawData(componentData)" :key="i" class="event-inner">
-      <div
-        v-if="componentData && componentData.events && componentData.events.length > 1"
-        class="event-inner-name"
-      >
-        {{ event.name }}
-      </div>
-      <div class="status-bar">
-        <div class="status-bar-dates">
-          <span>{{ getDateString(event.since) }}</span>
-          <span>{{ getDateString(event.until) }}</span>
-        </div>
-        <div :id="`${event.id}-total`" class="status-bar-progress">
-          <div :id="`${event.id}-past`" class="status-bar-progress-past" />
-        </div>
-      </div>
-      <div class="status-info">
-        {{ getInfo(event) }}
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
-import { onMounted, onUpdated, type PropType } from 'vue'
+import { onMounted, onUpdated } from 'vue'
 import { type Event, normalizeRawData } from '@/types/event'
 import type { LoadRawMenuItem } from '@/types/menu-item'
 import { getInfo, getDateString } from '@/types/time.methods'
+import type { LoadRawCategory } from '@/types/category'
 
-const props = defineProps({
-  componentData: { type: Object as PropType<LoadRawMenuItem>, required: false },
-  allData: { required: false }
-})
+interface Props {
+  componentData: LoadRawMenuItem
+  allData?: LoadRawCategory[]
+}
 
-const getColor = function (ratio: number, since: Date, until: Date) {
+const props = defineProps<Props>()
+
+function getColor(ratio: number, since: Date, until: Date) {
   const differenceInYears = (until.getTime() - since.getTime()) / (1000 * 60 * 60 * 24 * 365)
   const hueConstant = 120
   let hue = 0
@@ -51,7 +23,7 @@ const getColor = function (ratio: number, since: Date, until: Date) {
   return ['hsl(', hue.toString(10), ',100%,50%)'].join('')
 }
 
-const getRatio = function (since: Date, until: Date): number {
+function getRatio(since: Date, until: Date): number {
   const currentTime: number = new Date(Date.now()).getTime()
 
   if (since.getTime() >= until.getTime() || currentTime >= until.getTime()) return 1
@@ -67,7 +39,7 @@ const getRatio = function (since: Date, until: Date): number {
   return ratio
 }
 
-const makeStatusBar = function () {
+function makeStatusBar() {
   const normalData = normalizeRawData(props.componentData)
   for (let i = 0; i < normalData.length; i++) {
     const event: Event = normalData[i]
@@ -95,6 +67,34 @@ onUpdated(() => {
   makeStatusBar()
 })
 </script>
+
+<template>
+  <div v-if="componentData" class="dashboard-section-title">
+    {{ componentData.menu_item_data.name }}
+  </div>
+  <div class="dashboard-event">
+    <div v-for="(event, i) in normalizeRawData(componentData)" :key="i" class="event-inner">
+      <div
+        v-if="componentData && componentData.events && componentData.events.length > 1"
+        class="event-inner-name"
+      >
+        {{ event.name }}
+      </div>
+      <div class="status-bar">
+        <div class="status-bar-dates">
+          <span>{{ getDateString(event.since) }}</span>
+          <span>{{ getDateString(event.until) }}</span>
+        </div>
+        <div :id="`${event.id}-total`" class="status-bar-progress">
+          <div :id="`${event.id}-past`" class="status-bar-progress-past" />
+        </div>
+      </div>
+      <div class="status-info">
+        {{ getInfo(event) }}
+      </div>
+    </div>
+  </div>
+</template>
 
 <style>
 .status-bar {

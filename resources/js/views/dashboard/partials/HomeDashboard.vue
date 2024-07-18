@@ -1,7 +1,15 @@
 <template>
   <div class="dashboard-section-title">Истекут в течении 30 дней</div>
-  <div class="main" v-if="getEventsDueInMonth(props.allData)">
-    <div class="event-due" v-for="(eventDue, i) in getEventsDueInMonth(props.allData)" :key="i">
+  <div class="main" v-if="getEventsDueInMonth(props.allData).length > 0">
+    <div
+      class="event-due"
+      v-for="(eventDue, i) in getEventsDueInMonth(props.allData).sort((a, b) => {
+        if (a.event.until.getTime() < b.event.until.getTime()) return -1
+        if (a.event.until.getTime() > b.event.until.getTime()) return 1
+        else return 0
+      })"
+      :key="i"
+    >
       <div class="event-due-name">
         {{ eventDue.event.name }}
       </div>
@@ -11,7 +19,7 @@
       <router-link :to="`/${eventDue.routeName}`" class="event-due-link">Перейти</router-link>
     </div>
   </div>
-  <div class="main" v-else></div>
+  <div class="main" v-else>Нет ближайших событий</div>
 </template>
 
 <script setup lang="ts">

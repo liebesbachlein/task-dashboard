@@ -2,7 +2,7 @@
   <div class="site-content grey-background">
     <div class="standalone-box-wrapper">
       <div class="standalone-box form-wrapper">
-        <div class="form-large-title">Вход в личный кабинет</div>
+        <div class="form-large-title">Регистрация в личный кабинет</div>
         <form class="form-role" @submit.prevent="handleSubmit">
           <label>Email</label>
           <input
@@ -31,8 +31,13 @@
           </div>
 
           <div class="submit-button-wrapper">
-            <Loader v-if="loader" />
-            <input type="submit" :disabled="!enableSubmit" class="button" value="Войти" />
+            <CircularLoader v-if="loader" />
+            <input
+              type="submit"
+              :disabled="!enableSubmit"
+              class="button"
+              value="Зарегистрироваться"
+            />
           </div>
         </form>
         <label v-show="messageOnSubmit.length > 0" class="label-message">{{
@@ -42,13 +47,13 @@
           class="label-link label-message"
           to="/"
           style="text-decoration: underline; margin-bottom: 1rem"
-          >Забыли пароль?</router-link
+          >Вернуться на главную</router-link
         >
         <router-link
           class="label-link label-message"
           to="/"
           style="text-decoration: underline; margin-bottom: 1rem"
-          >Зарегистрироваться</router-link
+          >Войти в аккаунт</router-link
         >
       </div>
     </div>
@@ -57,9 +62,10 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import Loader from '@/components/Loader.vue'
+import CircularLoader from '@/components/CircularLoader.vue'
 import axios from 'axios'
 import router from '@/router'
+import BackToPage from '../admin/components/BackToPage.vue'
 
 const isPasswordHidden = ref<boolean>(true)
 const toggleVisibilityPassword = function () {
@@ -105,10 +111,9 @@ const handleSubmit = function () {
   if (enableSubmit.value) {
     loader.value = true
     axios
-      .post('/users/login', {
+      .post('/users/register', {
         email: email.value,
-        password: password.value,
-        user_type: 'admin'
+        password: password.value
       })
       .then((res) => {
         messageOnSubmit.value = res.statusText
@@ -123,60 +128,4 @@ const handleSubmit = function () {
 }
 </script>
 
-<style>
-.password-wrapper {
-  height: fit-content;
-  width: 100%;
-  border: 1px solid #c4dae5;
-  border-radius: 0.25rem;
-  color: #454545;
-  margin-bottom: 1.5rem;
-  display: grid;
-  grid-template-columns: auto min-content;
-  align-items: center;
-}
-
-.password-wrapper:has(input:focus) {
-  border: 1px solid #fff;
-  outline: 1px solid #454545;
-}
-
-.password-wrapper:has(input:-webkit-autofill) {
-  background: #e8f0fe;
-}
-
-input.blank-input,
-input.blank-input:focus {
-  grid-column: 1;
-  border: none;
-  margin: 0;
-  outline: none;
-}
-
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-  background-color: #e8f0fe;
-}
-
-.password-eye {
-  width: 40px;
-  height: 40px;
-  grid-column: 2;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  object-fit: fill;
-  margin-right: 0.25rem;
-}
-
-.password-eye img {
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  position: relative;
-  top: 12px;
-}
-</style>
+<style></style>

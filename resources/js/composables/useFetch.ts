@@ -13,6 +13,7 @@ export type UseFetchAllData = {
   mapRouteToComponent: Ref<Map<string, LoadRawMenuItem>>
   loader: Ref<boolean>
   messageOnSubmit: Ref<string>
+  isLoggedIn: Ref<boolean>
 }
 
 export function useFetchAllData(): UseFetchAllData {
@@ -22,13 +23,15 @@ export function useFetchAllData(): UseFetchAllData {
   const mapRouteToComponent = ref<Map<string, LoadRawMenuItem>>(
     new Map<string, LoadRawMenuItem>([])
   )
+  const isLoggedIn = ref<boolean>(false)
   loader.value = true
 
   watchEffect(() => {
     axios
       .get('/api/all')
       .then((res) => {
-        data.value = res.data ?? [] //normalizeRawData(res.data)
+        data.value = res.data['data'] ?? [] //normalizeRawData(res.data)
+        isLoggedIn.value = res.data['isLoggedIn']
         mapRouteToComponent.value = createMapRouteToComponent(data.value)
         loader.value = false
       })
@@ -37,7 +40,7 @@ export function useFetchAllData(): UseFetchAllData {
         messageOnSubmit.value = 'Ошибка: ' + err
       })
   })
-  return { data, mapRouteToComponent, loader, messageOnSubmit }
+  return { data, mapRouteToComponent, loader, messageOnSubmit, isLoggedIn }
 }
 
 const createMapRouteToComponent = function (data: LoadRawCategory[]): Map<string, LoadRawMenuItem> {

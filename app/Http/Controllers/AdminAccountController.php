@@ -18,7 +18,7 @@ class AdminAccountController extends Controller
         ]);
 
         if (auth()->guard('admin')->attempt(['email'=>$validated['email'], 'password'=>$validated['password']])) {
-            //$request->session()->regenerate();
+            $request->session()->regenerate();
             return response(status: 200);
         } 
 

@@ -7,7 +7,7 @@
         <input :class="{ invalid: nameError }" type="text" v-model="name" required />
 
         <div class="submit-button-wrapper">
-          <Loader v-if="loader" />
+          <CircularLoader v-if="loader" />
           <input type="submit" :disabled="!enableSubmit" class="button" value="Добавить" />
         </div>
       </form>
@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import axios from 'axios'
 import { ref, computed } from 'vue'
-import Loader from '@/components/Loader.vue'
+import CircularLoader from '@/components/CircularLoader.vue'
 
 const loader = ref<boolean>(false)
 const messageOnSubmit = ref<string>(' ')

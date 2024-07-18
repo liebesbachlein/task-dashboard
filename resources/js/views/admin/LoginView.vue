@@ -31,7 +31,7 @@
           </div>
 
           <div class="submit-button-wrapper">
-            <Loader v-if="loader" />
+            <CircularLoader v-if="loader" />
             <input type="submit" :disabled="!enableSubmit" class="button" value="Войти" />
           </div>
         </form>
@@ -51,7 +51,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import Loader from '@/components/Loader.vue'
+import CircularLoader from '@/components/CircularLoader.vue'
 import axios from 'axios'
 import router from '@/router'
 

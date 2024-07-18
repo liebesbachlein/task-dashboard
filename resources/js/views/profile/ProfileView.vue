@@ -1,7 +1,11 @@
 <template>
   <div class="site-content dashboard">
     <Transition name="side-pop-menu">
-      <NavigationUser v-show="isNavOpen" @closeNavUser="isNavOpen = !isMobile || false" />
+      <NavigationUser
+        :who-is-user="whoIsUser"
+        v-show="isNavOpen"
+        @closeNavUser="isNavOpen = !isMobile || false"
+      />
     </Transition>
     <div class="dashboard-inner dashboard-inner-role">
       <div class="dashboard-title-wrap">
@@ -12,17 +16,27 @@
           @click="isNavOpen = true"
         />
       </div>
-      <RouterView />
+      <RouterView v-slot="{ Component }">
+        <component :is="Component" :who-is-user="whoIsUser" />
+      </RouterView>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import NavigationUser from './components/NavigationUser.vue'
+import NavigationUser from './partials/NavigationUser.vue'
+import axios from 'axios'
 
 const isNavOpen = ref(false)
 const isMobile = ref(false)
+const whoIsUser = ref<{
+  email: string
+  id: string
+}>({
+  email: '',
+  id: ''
+})
 
 onMounted(() => {
   addEventListener('resize', () => {
@@ -32,6 +46,19 @@ onMounted(() => {
 
   isMobile.value = window.matchMedia('(max-width: 949px)').matches
   if (!isMobile.value) isNavOpen.value = true
+})
+
+axios.get('/sanctum/csrf-cookie').then((sanctumRes) => {
+  axios
+    .get('/api/user/me')
+    .then((res) => {
+      whoIsUser.value.email = res.data.email
+      whoIsUser.value.id = res.data.id
+      console.log(whoIsUser.value)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
 })
 </script>
 

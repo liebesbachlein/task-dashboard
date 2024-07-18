@@ -25,8 +25,20 @@ class NotificationController extends Controller
     }
 
     public function emails() {
-        $all = Notification::all()->groupBy('email');
+        $all = Notification::all()->sortBy('email')->groupBy('email');
         return $all;
+    }
+
+    public function showNotificationByEmail($user_id) {
+        $notifications = Notification::where("user_id", '=', $user_id)->get();
+        $data = [];
+        foreach ($notifications as $notification) {
+            $d['event'] = Event::find($notification->event_id);
+            $d['notification'] = $notification;
+            
+            $data[] = $d;
+        }
+        return $data;
     }
 
     public function store(Request $request) {

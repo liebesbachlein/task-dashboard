@@ -29,7 +29,7 @@ class CategoryController extends Controller
         return Category::findOrFail($id);
     }
 
-    public function all() {
+    public function all(Request $request) {
         $all = [];
         $categories = Category::orderBy('name')->get();
 
@@ -47,8 +47,10 @@ class CategoryController extends Controller
             $cat_arr['menu_items'] = $menu_arr;
             $all[] = $cat_arr;
         }
-
-        return $all;
+        $res['data'] = $all;
+        $res['isLoggedIn'] = !!($request->user());
+        
+        return $res;
     }
 
     public function update(Request $request, $id) {

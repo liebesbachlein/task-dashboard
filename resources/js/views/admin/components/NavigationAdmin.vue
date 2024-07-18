@@ -59,7 +59,7 @@ const closeNavAdmin = () => emits('closeNavAdmin', true)
 
 const logOut = function () {
   axios
-    .post('/users/logout')
+    .post('/admins/logout')
     .then((res) => {
       //?
       router.push({ path: '/' })

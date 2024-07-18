@@ -27,7 +27,7 @@
         </select>
 
         <div class="submit-button-wrapper">
-          <Loader v-if="loader" />
+          <CircularLoader v-if="loader" />
           <input type="submit" :disabled="!enableSubmit" class="button" value="Добавить" />
         </div>
       </form>
@@ -40,7 +40,7 @@
 import axios from 'axios'
 import { ref, computed } from 'vue'
 import { type Event, type LoadRawEvent } from '@/types/event'
-import Loader from '@/components/Loader.vue'
+import CircularLoader from '@/components/CircularLoader.vue'
 import { useFetchAllData } from '@/composables/useFetch'
 import type { Category, LoadRawCategory } from '@/types/category'
 

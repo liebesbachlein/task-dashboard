@@ -18,4 +18,8 @@ class UserController extends Controller
         $validated['password'] = bcrypt($validated['password']);
         User::create($validated);
     }
+
+    public function destroy($id) {
+        User::destroy($id);
+    }
 }

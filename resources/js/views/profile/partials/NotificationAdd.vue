@@ -2,17 +2,8 @@
   <div class="dashboard-section dashboard-section-role">
     <div class="form-wrapper">
       <div class="form-large-title">Добавить уведомление</div>
-      <form class="form-role" @submit.prevent="handleSubmit">
-        <label>Email</label>
-        <input
-          id="email"
-          name="email"
-          :class="{ invalid: emailError }"
-          type="email"
-          v-model="email"
-          required
-        />
 
+      <form class="form-role" @submit.prevent="handleSubmit">
         <label>Событие</label>
         <select :class="{ invalid: eventIdError }" v-model="eventId" required>
           <optgroup
@@ -27,7 +18,7 @@
         </select>
 
         <div class="submit-button-wrapper">
-          <Loader v-if="loader" />
+          <CircularLoader v-if="loader" />
           <input type="submit" :disabled="!enableSubmit" class="button" value="Добавить" />
         </div>
       </form>
@@ -38,15 +29,23 @@
 
 <script setup lang="ts">
 import axios from 'axios'
-import { ref, computed } from 'vue'
+import { ref, computed, type PropType } from 'vue'
 import { type Event, type LoadRawEvent } from '@/types/event'
-import Loader from '@/components/Loader.vue'
+import CircularLoader from '@/components/CircularLoader.vue'
 import { useFetchAllData } from '@/composables/useFetch'
 import type { Category, LoadRawCategory } from '@/types/category'
 
 const { data, loader, messageOnSubmit } = useFetchAllData()
 
-const email = ref<string>()
+const props = defineProps({
+  whoIsUser: {
+    type: Object as PropType<{
+      email: string
+      id: string
+    }>,
+    required: true
+  }
+})
 
 const eventId = ref<number | null>(null)
 
@@ -56,35 +55,16 @@ const eventIdError = computed(() => {
   return false
 })
 
-const emailError = computed(() => {
-  if (typeof email.value === 'string') return email.value.length == 0 || !validateEmail(email.value)
-
-  return false
-})
-
 const enableSubmit = computed(() => {
-  return email.value && eventId.value && !eventIdError.value && !emailError.value
+  return eventId.value && !eventIdError.value && props.whoIsUser.email
 })
-
-const validateEmail = function (email: string) {
-  if (
-    // eslint-disable-next-line no-useless-escape
-    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-      email
-    )
-  ) {
-    return true
-  } else {
-    return false
-  }
-}
 
 const handleSubmit = function () {
   if (enableSubmit.value) {
     loader.value = true
     axios
-      .post('/api/notification', {
-        email: email.value,
+      .post('/api/user/notification', {
+        email: props.whoIsUser.email,
         event_id: eventId.value
       })
       .then((res) => {

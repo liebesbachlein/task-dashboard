@@ -6,6 +6,7 @@
         v-show="isNavOpen"
         :all-data="data"
         :current-route-name="currentMenuItem?.menu_item_data.route_name"
+        :is-logged-in="isLoggedIn"
         @closeNav="isNavOpen = !isMobile || false"
       />
     </Transition>
@@ -30,14 +31,14 @@
 <script setup lang="ts">
 import { getCurrentInstance, onMounted, ref, watch } from 'vue'
 import type { LoadRawMenuItem } from '@/types/menu-item'
-import NavigationDashboard from './components/NavigationDashboard.vue'
+import NavigationDashboard from './partials/NavigationDashboard.vue'
 import NotFoundView from '../not-found/NotFoundView.vue'
 import { useErrorStore } from '@/stores/error'
 import { RouterView, useRoute } from 'vue-router'
-import Loader from '@/components/Loader.vue'
+import CircularLoader from '@/components/CircularLoader.vue'
 import { useFetchAllData } from '@/composables/useFetch'
 
-const { data, mapRouteToComponent, loader, messageOnSubmit } = useFetchAllData()
+const { data, mapRouteToComponent, loader, messageOnSubmit, isLoggedIn } = useFetchAllData()
 
 const home: LoadRawMenuItem = {
   menu_item_data: {
