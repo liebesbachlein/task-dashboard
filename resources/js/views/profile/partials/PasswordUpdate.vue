@@ -1,6 +1,6 @@
 <template>
   <BackToPage route="/admin/control-all" />
-  <div class="dashboard-section dashboard-section-role">
+  <div class="page-content page-content-role">
     <div class="form-wrapper">
       <div class="form-large-title">Изменить категорию</div>
       <form class="form-role" @submit.prevent="handleSubmit">
@@ -8,12 +8,12 @@
         <input :class="{ invalid: nameError }" type="text" v-model="name" required />
 
         <div class="submit-button-wrapper">
-          <CircularLoader v-if="loaderUpdate" />
+          <LoaderCircular v-if="loaderUpdate" />
           <input type="submit" :disabled="!enableSubmit" class="button" value="Внести изменения" />
         </div>
       </form>
       <div class="submit-button-wrapper">
-        <CircularLoader v-if="loaderDelete" />
+        <LoaderCircular v-if="loaderDelete" />
         <div type="submit" class="button button-delete" @click="deleteThis">Удалить</div>
       </div>
       <label v-show="messageOnSubmit.length > 0" class="label-message">{{ messageOnSubmit }}</label>
@@ -26,7 +26,7 @@ import router from '@/router'
 import axios from 'axios'
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import CircularLoader from '@/components/CircularLoader.vue'
+import LoaderCircular from '@/components/LoaderCircular.vue'
 
 const loaderUpdate = ref<boolean>(false)
 const loaderDelete = ref<boolean>(false)

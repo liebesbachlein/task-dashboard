@@ -1,10 +1,10 @@
 <template>
-  <div class="dashboard-section dashboard-section-role">
+  <div class="page-content page-content-role">
     <div class="form-wrapper">
       <div class="form-large-title">Пользователи</div>
       <div class="form-role search-email">
         <div v-if="loader" class="loader-wrapper">
-          <CircularLoader :is-blue="true" />
+          <LoaderCircular :is-blue="true" />
         </div>
         <div class="delete-item" v-for="(account, i) in accounts" :key="i">
           <router-link
@@ -25,7 +25,7 @@
 import axios from 'axios'
 import { ref } from 'vue'
 import type { Notification } from '@/types/notification'
-import CircularLoader from '@/components/CircularLoader.vue'
+import LoaderCircular from '@/components/LoaderCircular.vue'
 const search = ref<string>()
 const searchOption = ref(0)
 const isIconActive = ref(false)

@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard-section dashboard-section-role">
+  <div class="page-content page-content-role">
     <div class="form-wrapper">
       <div class="form-large-title">Добавить событие</div>
       <form class="form-role" @submit.prevent="handleSubmit">
@@ -21,7 +21,7 @@
         </select>
 
         <div class="submit-button-wrapper">
-          <CircularLoader v-if="loader" />
+          <LoaderCircular v-if="loader" />
           <input type="submit" :disabled="!enableSubmit" class="button" value="Добавить" />
         </div>
       </form>
@@ -35,7 +35,7 @@ import type { Category } from '@/types/category'
 import { loadCategories } from '@/types/data'
 import axios from 'axios'
 import { computed, ref } from 'vue'
-import CircularLoader from '@/components/CircularLoader.vue'
+import LoaderCircular from '@/components/LoaderCircular.vue'
 
 const loader = ref<boolean>(false)
 const messageOnSubmit = ref<string>(' ')

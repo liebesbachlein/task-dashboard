@@ -1,25 +1,8 @@
-<template>
-  <div class="site-content dashboard admin-backdrop">
-    <Transition name="side-pop-menu">
-      <NavigationAdmin v-show="isNavOpen" @closeNavAdmin="isNavOpen = !isMobile || false" />
-    </Transition>
-    <div class="dashboard-inner dashboard-inner-role">
-      <div class="dashboard-title-wrap">
-        <div class="dashboard-title">Панель администратора</div>
-        <img
-          class="dashboard-arrow"
-          src="@/assets/icons/arrow-left.svg"
-          @click="isNavOpen = true"
-        />
-      </div>
-      <RouterView />
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import NavigationAdmin from './components/NavigationAdmin.vue'
+import NavigationAdmin from './partials/NavigationAdmin.vue'
+import { useMenuSidebarStore } from '@/stores/useMenuSidebarStore'
+import LayoutHeader from '@/components/LayoutHeader.vue'
 
 const isNavOpen = ref(false)
 const isMobile = ref(false)
@@ -35,22 +18,31 @@ onMounted(() => {
 })
 </script>
 
-<style>
-.admin-backdrop {
-}
+<template>
+  <div class="page">
+    <Transition name="sidebar-pop">
+      <NavigationAdmin v-show="!isMobile || useMenuSidebarStore().isMenuSidebarOpen" />
+    </Transition>
+    <div class="page-content-wrapper">
+      <LayoutHeader title="Admin panel" />
+      <RouterView />
+    </div>
+  </div>
+</template>
 
-.dashboard-inner-role {
+<style>
+.page-content-wrapper-role {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.dashboard-section-role {
+.page-content-role {
   width: 100%;
 }
 
 @media only screen and (min-width: 950px) {
-  .dashboard-section-role {
+  .page-content-role {
     width: 55%;
   }
 }

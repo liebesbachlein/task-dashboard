@@ -1,9 +1,9 @@
 <template>
-  <div class="site-content grey-background">
+  <div class="page grey-background">
     <div class="standalone-box-wrapper">
       <div class="standalone-box form-wrapper">
         <div class="form-large-title">Вход в личный кабинет</div>
-        <form class="form-role" @submit.prevent="handleSubmit">
+        <form spellcheck="false" class="form-role" @submit.prevent="handleSubmit">
           <label>Email</label>
           <input
             :class="{ invalid: emailError }"
@@ -31,7 +31,7 @@
           </div>
 
           <div class="submit-button-wrapper">
-            <CircularLoader v-if="loader" />
+            <LoaderCircular v-if="loader" />
             <input type="submit" :disabled="!enableSubmit" class="button" value="Войти" />
           </div>
         </form>
@@ -57,7 +57,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import CircularLoader from '@/components/CircularLoader.vue'
+import LoaderCircular from '@/components/LoaderCircular.vue'
 import axios from 'axios'
 import router from '@/router'
 

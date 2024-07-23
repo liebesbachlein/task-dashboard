@@ -1,33 +1,3 @@
-<template>
-  <NotFoundView v-if="useErrorStore().error" />
-  <div v-else class="site-content dashboard">
-    <Transition name="side-pop-menu">
-      <NavigationDashboard
-        v-show="isNavOpen"
-        :all-data="data"
-        :current-route-name="currentMenuItem?.menu_item_data.route_name"
-        :is-logged-in="isLoggedIn"
-        @closeNav="isNavOpen = !isMobile || false"
-      />
-    </Transition>
-    <div class="dashboard-inner">
-      <div class="dashboard-title-wrap">
-        <div class="dashboard-title">Dashboard</div>
-        <img
-          class="dashboard-arrow"
-          src="@/assets/icons/arrow-left.svg"
-          @click="isNavOpen = true"
-        />
-      </div>
-      <div class="dashboard-section">
-        <RouterView v-slot="{ Component }">
-          <component :is="Component" :component-data="currentMenuItem" :all-data="data" />
-        </RouterView>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { getCurrentInstance, onMounted, ref, watch } from 'vue'
 import type { LoadRawMenuItem } from '@/types/menu-item'
@@ -35,8 +5,9 @@ import NavigationDashboard from './partials/NavigationDashboard.vue'
 import NotFoundView from '../not-found/NotFoundView.vue'
 import { useErrorStore } from '@/stores/error'
 import { RouterView, useRoute } from 'vue-router'
-import CircularLoader from '@/components/CircularLoader.vue'
 import { useFetchAllData } from '@/composables/useFetch'
+import LayoutHeader from '@/components/LayoutHeader.vue'
+import { useMenuSidebarStore } from '@/stores/useMenuSidebarStore'
 
 const { data, mapRouteToComponent, loader, messageOnSubmit, isLoggedIn } = useFetchAllData()
 
@@ -103,113 +74,94 @@ onMounted(() => {
 })
 </script>
 
+<template>
+  <NotFoundView v-if="useErrorStore().error" />
+  <div v-else class="page">
+    <Transition name="sidebar-pop">
+      <NavigationDashboard
+        v-show="!isMobile || useMenuSidebarStore().isMenuSidebarOpen"
+        :all-data="data"
+        :loader="loader"
+        :current-route-name="currentMenuItem?.menu_item_data.route_name"
+        :is-logged-in="isLoggedIn"
+      />
+    </Transition>
+    <div class="page-content-wrapper" @click.self="useMenuSidebarStore().closeMenuSidebar">
+      <LayoutHeader title="Dashboard" />
+      <div class="page-content">
+        <RouterView v-slot="{ Component }">
+          <component
+            :is="Component"
+            :component-data="currentMenuItem"
+            :all-data="data"
+            :loader="loader"
+          />
+        </RouterView>
+      </div>
+    </div>
+  </div>
+</template>
+
 <style>
-.dashboard {
-  background-color: #fff;
-  overflow-y: scroll;
+.page {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
   min-height: 100vh;
+  overflow-y: scroll;
+  background-color: #fff;
 }
 
-.dashboard-inner {
+.page-content-wrapper {
   width: 100%;
   position: absolute;
   height: fit-content;
   padding: 0;
+  z-index: 0;
 }
 
-.dashboard-title-wrap {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: var(--mobile-dashboard-nav-top-height);
-  width: 100%;
-  padding: var(--mobile-dashboard-nav-top-padding);
-  margin-bottom: 2rem;
-  box-shadow: 1px 1px 4px 0px rgba(101, 101, 101, 0.25);
-}
-
-.dashboard-title {
-  font-size: 1.25rem;
-}
-
-img.dashboard-arrow {
-  height: 1.5rem;
-}
-
-.dashboard-section {
+.page-content {
   width: 100%;
   height: fit-content;
   padding: 2rem 1rem;
   background-color: #fff;
+  margin: 0 auto;
 }
 
-.dashboard-section-title {
-  font-size: 1.25rem;
-  margin-bottom: 2rem;
-}
-
-.side-pop-menu-enter-active,
-.side-pop-menu-leave-active {
+.sidebar-pop-enter-active,
+.sidebar-pop-leave-active {
   transition: transform 0.1s ease;
 }
 
-.side-pop-menu-enter-from,
-.side-pop-menu-leave-to {
+.sidebar-pop-enter-from,
+.sidebar-pop-leave-to {
   transform: translateX(100%);
 }
 
-.dashboard-event * {
-  transition: none;
-}
-
-.dashboard-event {
-  margin-bottom: 3rem;
-}
-
-.event-inner {
-  margin-bottom: 3.5rem;
-}
-
-.event-inner-name {
-  margin-bottom: 1.75rem;
-}
-
 @media only screen and (min-width: 950px) {
-  .side-pop-menu-enter-active,
-  .side-pop-menu-leave-active {
+  .sidebar-pop-enter-active,
+  .sidebar-pop-leave-active {
     transition: none;
   }
 
-  .side-pop-menu-enter-from,
-  .side-pop-menu-leave-to {
+  .sidebar-pop-enter-from,
+  .sidebar-pop-leave-to {
     transform: none;
   }
 
-  .dashboard {
+  .page {
     background-color: var(--backdrop-color-desktop);
   }
 
-  .dashboard-inner {
+  .page-content-wrapper {
     width: calc(100% - var(--side-menu-desktop-width));
     left: var(--side-menu-desktop-width);
     padding: 0 2.5rem 3rem 2.5rem;
   }
 
-  .dashboard-title-wrap {
-    width: 100%;
-    height: 3.2rem;
-    box-shadow: none;
-    padding: 0;
-    margin-bottom: 3rem;
-    align-items: flex-end;
-    text-align: left;
-  }
-
-  .dashboard-arrow {
-    display: none;
-  }
-
-  .dashboard-section {
+  .page-content {
     min-height: 60vh;
     padding: 2.5rem 2rem;
     border-radius: 0.5rem;

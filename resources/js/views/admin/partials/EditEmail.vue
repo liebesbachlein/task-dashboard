@@ -1,13 +1,13 @@
 <template>
   <BackToPage route="/admin/search-email" />
-  <div class="dashboard-section dashboard-section-role">
+  <div class="page-content page-content-role">
     <div class="form-wrapper">
       <div class="form-large-title">
         Уведомления
         {{ notifications && notifications[0] ? notifications[0].notification.email : '' }}
       </div>
       <div v-if="loader" class="loader-wrapper">
-        <CircularLoader :is-blue="true" />
+        <LoaderCircular :is-blue="true" />
       </div>
       <div class="form-role search-email">
         <div class="delete-item" v-for="(notification, i) in notifications" :key="i">
@@ -22,10 +22,10 @@
 </template>
 
 <script setup lang="ts">
-import BackToPage from '../components/BackToPage.vue'
+import BackToPage from '../../../components/BackToPage.vue'
 import { loadMenuItems } from '@/types/data'
 import type { MenuItem } from '@/types/menu-item'
-import CircularLoader from '@/components/CircularLoader.vue'
+import LoaderCircular from '@/components/LoaderCircular.vue'
 import router from '@/router'
 import axios from 'axios'
 import { computed, getCurrentInstance, ref } from 'vue'

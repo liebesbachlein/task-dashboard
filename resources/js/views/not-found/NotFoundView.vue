@@ -1,5 +1,5 @@
 <template>
-  <div class="site-content standalone-box-wrapper">
+  <div class="page standalone-box-wrapper">
     <div class="standalone-box not-found">
       <div class="not-found-top">
         <img src="@/assets/icons/logo-bcc-invest.svg" />

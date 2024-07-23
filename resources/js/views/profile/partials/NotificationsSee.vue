@@ -1,30 +1,8 @@
-<template>
-  <div class="dashboard-section dashboard-section-role">
-    <div class="form-wrapper">
-      <div class="form-large-title">Активные уведомления</div>
-      <div class="form-role search-email">
-        <div v-if="loader" class="loader-wrapper">
-          <CircularLoader :is-blue="true" />
-        </div>
-        <div
-          class="delete-item"
-          v-for="(notification, i) in notifications.filter((e) => e !== undefined)"
-          :key="i"
-        >
-          <span>{{ notification?.event?.name }}</span>
-          <img @click="deleteThis(notification?.notification.id)" src="@/assets/icons/delete.svg" />
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import type { LoadRawEvent } from '@/types/event'
 import axios from 'axios'
 import { getCurrentInstance, ref, watch, type PropType } from 'vue'
 import type { Notification } from '@/types/notification'
-import CircularLoader from '@/components/CircularLoader.vue'
 
 const props = defineProps({
   whoIsUser: {
@@ -83,6 +61,34 @@ const deleteThis = function (id: number) {
 }
 </script>
 
+<template>
+  <div class="page-content page-content-role">
+    <div class="form-wrapper">
+      <div class="form-large-title">Активные уведомления</div>
+      <div class="form-role search-email">
+        <template v-if="loader">
+          <div class="event-load" />
+          <div class="event-load" />
+          <div class="event-load" />
+        </template>
+        <template v-else>
+          <div
+            class="delete-item"
+            v-for="(notification, i) in notifications.filter((e) => e !== undefined)"
+            :key="i"
+          >
+            <span>{{ notification?.event?.name }}</span>
+            <img
+              @click="deleteThis(notification?.notification.id)"
+              src="@/assets/icons/delete.svg"
+            />
+          </div>
+        </template>
+      </div>
+    </div>
+  </div>
+</template>
+
 <style>
 .delete-item {
   display: flex;
@@ -95,5 +101,16 @@ const deleteThis = function (id: number) {
 
 .delete-item img {
   height: 1.5rem;
+}
+
+.event-load {
+  background: linear-gradient(90deg, #e1e2ffa2 40%, #eeefffa2 50%, #e1e2ffa2 60%);
+  background-size: 300%;
+  background-position-x: 100%;
+  animation: status-shimmer-long 1s infinite linear;
+
+  height: 2rem;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
 }
 </style>

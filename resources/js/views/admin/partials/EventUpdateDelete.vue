@@ -1,6 +1,6 @@
 <template>
   <BackToPage route="/admin/control-all" />
-  <div class="dashboard-section dashboard-section-role">
+  <div class="page-content page-content-role">
     <div class="form-wrapper">
       <div class="form-large-title">Изменить событие</div>
       <form class="form-role" @submit.prevent="handleSubmit">
@@ -25,12 +25,12 @@
         <input :class="{ invalid: untilError }" type="datetime-local" v-model="until" required />
 
         <div class="submit-button-wrapper">
-          <CircularLoader v-if="loaderUpdate" />
+          <LoaderCircular v-if="loaderUpdate" />
           <input type="submit" :disabled="!enableSubmit" class="button" value="Внести изменения" />
         </div>
       </form>
       <div class="submit-button-wrapper">
-        <CircularLoader v-if="loaderDelete" />
+        <LoaderCircular v-if="loaderDelete" />
         <div type="submit" class="button button-delete" @click="deleteThis">Удалить</div>
       </div>
       <label v-show="messageOnSubmit.length > 0" class="label-message">{{ messageOnSubmit }}</label>
@@ -39,10 +39,10 @@
 </template>
 
 <script setup lang="ts">
-import BackToPage from '../components/BackToPage.vue'
+import BackToPage from '../../../components/BackToPage.vue'
 import { loadMenuItems } from '@/types/data'
 import type { MenuItem } from '@/types/menu-item'
-import CircularLoader from '@/components/CircularLoader.vue'
+import LoaderCircular from '@/components/LoaderCircular.vue'
 import router from '@/router'
 import axios from 'axios'
 import { computed, ref } from 'vue'

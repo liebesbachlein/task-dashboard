@@ -10,7 +10,7 @@
             font-family: 'Inter', sans-serif
         }
 
-        .site-content {
+        .page {
             width: 100%;
             background-color: #f0f2f1;
             padding: 5rem auto;
@@ -53,7 +53,7 @@
     </style>
 </head>
 <body>
-    <div class="site-content standalone-box-wrapper">
+    <div class="page standalone-box-wrapper">
         <table width="100%" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td align="center">

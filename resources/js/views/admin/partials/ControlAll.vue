@@ -1,8 +1,8 @@
 <template>
-  <div class="dashboard-section dashboard-section-role">
+  <div class="page-content page-content-role">
     <div class="admin-controll-all">
       <div v-if="loader" class="loader-wrapper">
-        <CircularLoader :isBlue="true" />
+        <LoaderCircular :isBlue="true" />
       </div>
       <ul class="admin-show-all-item" v-for="category in data" :key="category.category_data.id">
         <li>
@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import CircularLoader from '@/components/CircularLoader.vue'
+import LoaderCircular from '@/components/LoaderCircular.vue'
 import { useFetchAllData } from '@/composables/useFetch'
 
 const { data, loader, messageOnSubmit } = useFetchAllData()
